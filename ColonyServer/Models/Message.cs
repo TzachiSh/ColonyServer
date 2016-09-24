@@ -15,7 +15,7 @@ namespace ColonyServer.Models
     {
         private ColonyDBContext db = new ColonyDBContext();
 
-
+        public int UserId { get; set;} 
         public string SenderName { get; set; }
         [Required]
         public string ReceiverName { get; set; }
@@ -28,7 +28,7 @@ namespace ColonyServer.Models
 
         public string sendMessage()
         {
-            FindToken();
+            FindUser();
 
             string postDataContentType = "application/json";
             string apiKey = "AIzaSyDRbCQLV_-PS68YPqhOs7c47qf6ycPaC3o"; // api of fcm
@@ -36,7 +36,7 @@ namespace ColonyServer.Models
             string token = ReceiverName;
             string message = Body;
             string contentTitle = SenderName;
-            string tickerText = "example test GCM";
+            int tickerText = UserId;
             DateTime date= DateTime.Now;
 
 
@@ -110,18 +110,18 @@ namespace ColonyServer.Models
         }
 
 
-        public void FindToken()
-        {
-            try
-            {
-                this.ReceiverName = db.Users.FirstOrDefault(acc => acc.UserName == this.ReceiverName).Token;
-                 
-            }
-            catch (NullReferenceException)
-            {
-                throw;
-            }
 
+    public void FindUser()
+    {
+        try
+        {
+            UserId = db.Users.FirstOrDefault(acc => acc.UserName == ReceiverName).UserId;
+
+            ReceiverName = db.Users.FirstOrDefault(acc => acc.UserName == this.ReceiverName).Token;
+        }
+        catch (NullReferenceException)
+        {
+            throw;
         }
     }
 }
