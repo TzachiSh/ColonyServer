@@ -37,6 +37,7 @@ namespace ColonyServer.Models
             string message = Body;
             string contentTitle = SenderName;
             string tickerText = "example test GCM";
+            DateTime date= DateTime.Now;
 
 
 
@@ -44,7 +45,8 @@ namespace ColonyServer.Models
             "{ \"registration_ids\": [ \"" + token + "\" ], " +
               "\"data\": {\"tickerText\":\"" + tickerText + "\", " +
                          "\"contentTitle\":\"" + contentTitle + "\", " +
-                         "\"message\": \"" + message + "\"}}";
+                         "\"message\":\"" + message + "\", " +
+                         "\"date\": \"" + date + "\"}}";
 
 
             ServicePointManager.ServerCertificateValidationCallback += new RemoteCertificateValidationCallback(ValidateServerCertificate);
