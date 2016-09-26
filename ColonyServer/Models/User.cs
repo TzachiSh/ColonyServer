@@ -17,14 +17,13 @@ namespace ColonyServer.Models
 
         [Key]
         public int UserId { get; set; }
-
         [RegularExpression("([a-zA-Z0-9.&'-]+)", ErrorMessage = "Enter only alphabets and numbers of User")]
-        [Required ,MinLength(4)]
+        [MinLength(4)]
         public string UserName { get; set; }
-
-        [RegularExpression("([a-zA-Z0-9.&'-]+)", ErrorMessage = "Enter only alphabets and numbers of Password")]
-        [Required]
+        [RegularExpression("([a-zA-Z0-9.&'-]+)", ErrorMessage = "Enter only alphabets and numbers of Password")]       
         public string Password { get; set; }
+        [Required]
+        public string Number {get;set; }
         public string Token { get; set; }
         public DateTime Created { get; set; }
 
@@ -39,12 +38,6 @@ namespace ColonyServer.Models
         {
 
             db.Users.Add(this);
-
-            if (UserExists(this.UserName))
-            {
-                
-                return false;
-            }
             try
             {
                 db.SaveChanges();
@@ -58,10 +51,10 @@ namespace ColonyServer.Models
             }
         }
 
-        public User FindUser(string userName)
+        public User FindUser(string Number)
         {
 
-                User user = db.Users.FirstOrDefault(acc => acc.UserName == userName);
+                User user = db.Users.FirstOrDefault(acc => acc.Number == Number);
                 return user;
                   
          }
@@ -71,13 +64,6 @@ namespace ColonyServer.Models
             
             try
             {
-                
-                if (user.Password != this.Password)
-                {
-                   
-                    return "Password Incorect";
-
-                }
                 if (this.Token != user.Token)
                 {
 
@@ -92,7 +78,7 @@ namespace ColonyServer.Models
             catch (NullReferenceException)
             {
                
-                return this.UserName + " not Found";
+                return this.Number + " not Found";
             }
             return "User login";
 
@@ -115,9 +101,9 @@ namespace ColonyServer.Models
 
         }
 
-        private bool UserExists(string id)
+        private bool UserExists(string Number)
         {
-            return db.Users.Count(e => e.UserName == id) > 0;
+            return db.Users.Count(e => e.Number == Number) > 0;
 
         }
 
