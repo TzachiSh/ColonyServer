@@ -36,7 +36,10 @@ namespace ColonyServer.Models
 
         public bool NewUser()
         {
-
+            if (UserExists(this.Number))
+            {
+                return false;
+            }
             db.Users.Add(this);
             try
             {
@@ -57,8 +60,7 @@ namespace ColonyServer.Models
                 User user = db.Users.FirstOrDefault(acc => acc.Number == Number);
                 return user;
                   
-         }
-
+        }
         public string LoginUser(User user)
         {
             
@@ -67,7 +69,7 @@ namespace ColonyServer.Models
                 if (this.Token != user.Token)
                 {
 
-                    var usr = db.Users.FirstOrDefault(acc => acc.UserName == user.UserName);
+                    var usr = db.Users.FirstOrDefault(acc => acc.Number == user.Number);
                     usr.Token = user.Token;
                     db.SaveChanges();
 

@@ -180,6 +180,10 @@
     <Compile Include="Migrations\201607100914030_addManyToManyUserGroup.Designer.cs">
       <DependentUpon>201607100914030_addManyToManyUserGroup.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201609271326598_AddNumberRowUser.cs" />
+    <Compile Include="Migrations\201609271326598_AddNumberRowUser.Designer.cs">
+      <DependentUpon>201609271326598_AddNumberRowUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AlertDialog.cs" />
     <Compile Include="Models\Group.cs" />
@@ -224,6 +228,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201607100914030_addManyToManyUserGroup.resx">
       <DependentUpon>201607100914030_addManyToManyUserGroup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201609271326598_AddNumberRowUser.resx">
+      <DependentUpon>201609271326598_AddNumberRowUser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

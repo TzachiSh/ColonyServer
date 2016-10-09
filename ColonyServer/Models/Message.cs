@@ -15,29 +15,31 @@ namespace ColonyServer.Models
     {
         private ColonyDBContext db = new ColonyDBContext();
 
-        public int UserId { get; set;} 
         public string SenderName { get; set; }
         [Required]
         public string ReceiverName { get; set; }
         public string Body { get; set; }
 
-      
-               
-   
+
+
+
 
 
         public string sendMessage()
         {
-            FindUser();
+            
 
             string postDataContentType = "application/json";
-            string apiKey = "AIzaSyDRbCQLV_-PS68YPqhOs7c47qf6ycPaC3o"; // api of fcm
-            
+            string apiKey = "AIzaSyCYceirfHwiHL4Se0oFKM5fXs_o5hqwQ10"; // api of fcm
+
+            string tickerText = ReceiverName; // number of sender
+            FindUser();
+
             string token = ReceiverName;
             string message = Body;
-            string contentTitle = SenderName;
-            int tickerText = UserId;
-            DateTime date= DateTime.Now;
+            string contentTitle = SenderName;                        
+            DateTime now = DateTime.Now;
+            string date =now.ToString("HH:MM");
 
 
 
@@ -111,17 +113,16 @@ namespace ColonyServer.Models
 
 
 
-    public void FindUser()
-    {
-        try
+        public void FindUser()
         {
-            UserId = db.Users.FirstOrDefault(acc => acc.UserName == ReceiverName).UserId;
-
-            ReceiverName = db.Users.FirstOrDefault(acc => acc.UserName == this.ReceiverName).Token;
-        }
-        catch (NullReferenceException)
-        {
-            throw;
+            try
+            {
+                this.ReceiverName = db.Users.FirstOrDefault(acc => acc.Number == this.ReceiverName).Token;
+            }
+            catch (NullReferenceException)
+            {
+                throw;
+            }
         }
     }
 }

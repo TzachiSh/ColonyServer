@@ -37,65 +37,26 @@ namespace ColonyServer.Controllers
             
             }
 
-        [HttpPost]
-        // Login user 
-        public IHttpActionResult PostLogin(User login)
-        {
-
-            if (ModelState.IsValid)
-            {
-
-
-                try
-                {
-                    
-                    alertDialog.Message = user.FindUser(login.UserName).LoginUser(login);
-                    if (alertDialog.Message.Equals("User login"))
-                    {
-                        alertDialog.Code = "log_success";
-                    }
-                    else
-                    {
-                        alertDialog.Code = "log_error";
-                    }
-                }
-                catch (NullReferenceException)
-                {
-                    alertDialog.Message = "User not found";
-                    alertDialog.Code = "log_error";
-
-                    return Ok(alertDialog);
-                }
-            }
-            else
-            {
-                alertDialog.Message = string.Join(" \n", ModelState.Values
-                                       .SelectMany(x => x.Errors)
-                                       .Select(x => x.ErrorMessage));
-                alertDialog.Code = "log_error";
-
-            }
-            return Ok(alertDialog);
-        }
-
-       
-
         // PuT: api/Users
-        //Add new user
+        // login/new user
         [ResponseType(typeof(User))]
         public IHttpActionResult PutUser(User user)
         {
             if (ModelState.IsValid)
             {
-
+                // check if user Exsist
                 if (!user.NewUser())
                 {
-                    alertDialog.Message = "User exsist";
-                    alertDialog.Code = "reg_error";
-
+                    //user Exsist try login.
+                    alertDialog.Message = user.FindUser(user.Number).LoginUser(user);
+                    if (alertDialog.Message.Equals("User login"))
+                    {
+                        alertDialog.Code = "log_success";
+                    }
                 }
                 else
                 {
+                    //if user note Exsist Create new User.
                     alertDialog.Message = "user Created";
                     alertDialog.Code = "reg_success";
 
@@ -103,10 +64,11 @@ namespace ColonyServer.Controllers
             }
             else
             {
+                 //check if was error in validation
                 alertDialog.Message = string.Join(" \n", ModelState.Values
                                        .SelectMany(x => x.Errors)
                                        .Select(x => x.ErrorMessage));
-                alertDialog.Code = "reg_error";
+                alertDialog.Code = "val_error";
 
 
             }
