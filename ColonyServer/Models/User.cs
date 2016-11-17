@@ -53,7 +53,6 @@ namespace ColonyServer.Models
 
             }
         }
-
         public User FindUser(string Number)
         {
 

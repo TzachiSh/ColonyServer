@@ -6,6 +6,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using ColonyServer.App_Data;
 using ColonyServer.Models;
+using System.Collections.Generic;
 
 namespace ColonyServer.Controllers
 {
@@ -89,6 +90,25 @@ namespace ColonyServer.Controllers
 
             }
             return Ok("user Delteted !");
+        }
+
+        [Route("api/User/contact")]
+        [HttpPost]
+        public IHttpActionResult PostContact([FromBody] List<Contact> contacts)
+        {
+            int i;
+            List<Contact> dbContact = new List<Contact>();
+
+            for (i = 0; i < contacts.Count; i++)
+            {
+                if (user.FindUser(contacts[i].Number)!=null)
+                {
+                    dbContact.Add(contacts[i]);
+                }
+         
+            }           
+
+            return Ok(dbContact);
         }
 
         //protected override void Dispose(bool disposing)
