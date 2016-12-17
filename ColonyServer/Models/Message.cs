@@ -32,12 +32,13 @@ namespace ColonyServer.Models
             string postDataContentType = "application/json";
             string apiKey = "AIzaSyCYceirfHwiHL4Se0oFKM5fXs_o5hqwQ10"; // api of fcm
 
-            string tickerText = ReceiverName; // number of sender
+            string tickerText = SenderName; // number of sender
+
             FindUser();
 
             string token = ReceiverName;
             string message = Body;
-            string contentTitle = SenderName;                        
+            string contentTitle = "nickname " + "("+SenderName+")";                        
             DateTime now = DateTime.Now;
             string date =now.ToString("HH:MM");
 

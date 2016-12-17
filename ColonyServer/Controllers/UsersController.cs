@@ -7,6 +7,11 @@ using System.Web.Http.Description;
 using ColonyServer.App_Data;
 using ColonyServer.Models;
 using System.Collections.Generic;
+using System.Net.Http;
+using Newtonsoft.Json.Linq;
+using System.Text;
+using Newtonsoft.Json;
+using log4net;
 
 namespace ColonyServer.Controllers
 {
@@ -94,21 +99,32 @@ namespace ColonyServer.Controllers
 
         [Route("api/User/contact")]
         [HttpPost]
-        public IHttpActionResult PostContact([FromBody] List<Contact> contacts)
+        [ResponseType(typeof(List<Contact>))]
+        public IHttpActionResult PostContact([FromBody]String jsonContacts)
         {
+            ILog log = LogManager.GetLogger("Test");
+            var contacts = JsonConvert.DeserializeObject<List<Contact>>(jsonContacts);
+            
             int i;
-            List<Contact> dbContact = new List<Contact>();
-
+            List<Contact> newContacts = new List<Contact>();
             for (i = 0; i < contacts.Count; i++)
             {
-                if (user.FindUser(contacts[i].Number)!=null)
+                if (user.FindUser(contacts[i].number)!=null)
                 {
-                    dbContact.Add(contacts[i]);
+                    newContacts.Add(contacts[i]);
                 }
          
-            }           
+            }
+            foreach (var c in newContacts)
+            {
+                log.Debug("server contact number : " + c.number);
+            }
 
-            return Ok(dbContact);
+
+
+            return Ok(newContacts);
+
+          
         }
 
         //protected override void Dispose(bool disposing)
