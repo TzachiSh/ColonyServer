@@ -13,13 +13,27 @@ namespace ColonyServer.Controllers
         // POST: api/Messages
         public IHttpActionResult Post(Message message)
         {
-            if (!ModelState.IsValid)
+           string stringregIds;
+            // on 
+            if (message.ReceiverNumber == null)
             {
-                return BadRequest(ModelState);
+                Group group = new Group();
+
+              var regIds = group.GetTokensGroup(message.GroupId);
+              stringregIds = string.Join("\",\"", regIds);
+
             }
-          
-            return Ok(message.sendMessage());
+            else
+            {
+                stringregIds = message.FindToken();
+            }
+
+            return Ok(message.sendMessage(stringregIds));
+
+
         }
+
+     
 
     }
 }

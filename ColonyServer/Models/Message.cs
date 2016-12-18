@@ -1,5 +1,6 @@
 ﻿using ColonyServer.App_Data;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
@@ -11,32 +12,29 @@ using System.Text;
 
 namespace ColonyServer.Models
 {
+    
     public class Message
     {
         private ColonyDBContext db = new ColonyDBContext();
 
         public string SenderName { get; set; }
-        [Required]
-        public string ReceiverName { get; set; }
+        public int GroupId { get; set;}
+        public string ReceiverNumber { get; set; }
         public string Body { get; set; }
 
 
 
 
 
-
-        public string sendMessage()
+        public string sendMessage(string stringregIds)
         {
-            
 
+            List<string> tokens = new List<string>();
             string postDataContentType = "application/json";
             string apiKey = "AIzaSyCYceirfHwiHL4Se0oFKM5fXs_o5hqwQ10"; // api of fcm
 
             string tickerText = SenderName; // number of sender
-
-            FindUser();
-
-            string token = ReceiverName;
+             
             string message = Body;
             string contentTitle = "nickname " + "("+SenderName+")";                        
             DateTime now = DateTime.Now;
@@ -45,7 +43,7 @@ namespace ColonyServer.Models
 
 
             string postData =
-            "{ \"registration_ids\": [ \"" + token + "\" ], " +
+            "{ \"registration_ids\": [ \"" + stringregIds + "\" ], " +
               "\"data\": {\"tickerText\":\"" + tickerText + "\", " +
                          "\"contentTitle\":\"" + contentTitle + "\", " +
                          "\"message\":\"" + message + "\", " +
@@ -114,16 +112,19 @@ namespace ColonyServer.Models
 
 
 
-        public void FindUser()
+        public string FindToken()
         {
             try
             {
-                this.ReceiverName = db.Users.FirstOrDefault(acc => acc.Number == this.ReceiverName).Token;
+                var token = db.Users.FirstOrDefault(acc => acc.Number == this.ReceiverNumber).Token;
+
+                return token;
             }
             catch (NullReferenceException)
             {
                 throw;
             }
+            
         }
     }
 }

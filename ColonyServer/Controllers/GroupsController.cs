@@ -22,40 +22,35 @@ namespace ColonyServer.Controllers
         Group group = new Group();
         User user = new User();
 
-        // GET: api/Groups/5
+        // GET: api/Group/5
+        //groupDetails
+        [Route("api/Group/{groupId}")]
         [ResponseType(typeof(Group))]
-        public IHttpActionResult GetGroup(int id)
+        public IHttpActionResult GetGroup(int groupId)
         {
 
-            var groupDetails = group.GroupDetails(id).AsQueryable();
-            
-            
+            var groupDetails = group.GroupDetails(groupId);
 
-
-
-            return Ok();
+            return Ok(groupDetails);
         }
 
-
-
-        ////PUT: api/Groups/5
+        ////PUT: api/Group/AddUser/5
+        [Route("api/Group/AddUser/{groupId}")]
+        [HttpPost]
         [ResponseType(typeof(List<string>))]
-        public IHttpActionResult PutGroup(int id, List<string> users)
+        public IHttpActionResult AddUserToGroup(int groupId, List<string> usersNumber)
         {
+            group = group.AddUsersToGroup(groupId, usersNumber);      
 
-            group = group.AddUsersToGroup(id, users);
-
-
-
-        
-
-            return Ok(group.Users.Select(c=> c.UserName));
+            return Ok(group.Users.Select(c=> c.Number));
         }
 
 
         // POST: api/Groups
+        //create group
         [ResponseType(typeof(Group))]
-        public IHttpActionResult PostGroup(Group group)
+        [HttpPost]
+        public IHttpActionResult NewGroup(Group group)
         {
             if (!ModelState.IsValid)
             {

@@ -46,14 +46,14 @@ namespace ColonyServer.Models
 
         }
 
-        public Group AddUsersToGroup(int groupId ,List<string> usersName)
+        public Group AddUsersToGroup(int groupId ,List<string> usersNumber)
         {
             var group = db.Groups.Find(groupId);
             User user = new User();
      
-            foreach (var name in usersName)
+            foreach (var userNumber in usersNumber)
             {
-                user = db.Users.FirstOrDefault(u=>u.UserName == name);
+                user = db.Users.FirstOrDefault(u=>u.Number == userNumber);
                 //user.Groups = null;
 
                 group.Users.Add(user);
@@ -76,13 +76,23 @@ namespace ColonyServer.Models
 
         }
 
-        public IQueryable GroupDetails(int idGroup)        
+        public IEnumerable GroupDetails(int idGroup)        
         {
             
             var group = db.Groups.Where(g => g.GroupId == idGroup)
-                .Select(g => new { g.GroupId, g.GroupName, g.Created, Users = g.Users.Select(u => new List<string> { u.UserName }), Tokens = g.Users.Select(u => new List<string> { u.Token }) });
-
+                .Select(g => new { g.GroupId, g.GroupName, g.Created, Users = g.Users
+                .Select(u => new List<string> { u.UserName,u.Number })});
             return  group;
+        }
+
+        public List<string> GetTokensGroup(int idGroup)
+        {
+            List<string> tokens = new List<string>();
+            var group = db.Groups.Where(g => g.GroupId == idGroup).SelectMany(g => g.Users.Select(u => u.Token)).ToList();
+ 
+            return group;
+            
+            
         }
 
         private bool GroupExists(int id)
