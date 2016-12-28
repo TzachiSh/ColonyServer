@@ -24,7 +24,7 @@ namespace ColonyServer.Controllers
 
         // GET: api/Group/5
         //groupDetails
-        [Route("api/Group/{groupId}")]
+        [Route("api/Groups/{groupId}")]
         [ResponseType(typeof(Group))]
         public IHttpActionResult GetGroup(int groupId)
         {
@@ -35,14 +35,16 @@ namespace ColonyServer.Controllers
         }
 
         ////PUT: api/Group/AddUser/5
-        [Route("api/Group/AddUser/{groupId}")]
+        [Route("api/Groups/{groupId}/AddUser/")]
         [HttpPost]
         [ResponseType(typeof(List<string>))]
-        public IHttpActionResult AddUserToGroup(int groupId, List<string> usersNumber)
+        public IHttpActionResult AddUserToGroup(int groupId,[FromBody] String jsUsersNumber)
         {
+            var usersNumber = JsonConvert.DeserializeObject<List<String>>(jsUsersNumber);
+
             group = group.AddUsersToGroup(groupId, usersNumber);      
 
-            return Ok(group.Users.Select(c=> c.Number));
+            return Ok();
         }
 
 
@@ -62,7 +64,8 @@ namespace ColonyServer.Controllers
 
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = group.GroupId }, group);
+            //return CreatedAtRoute("DefaultApi", new { id = group.GroupId }, group);
+            return Ok(group.GroupId);
         }
 
         //// DELETE: api/Groups/5

@@ -8,18 +8,18 @@ namespace ColonyServer.Controllers
 {
     public class MessagesController : ApiController
     {
-        
+
 
         // POST: api/Messages
-        public IHttpActionResult Post(Message message)
+        [Route("api/Messages/{isGroup}")]
+        public IHttpActionResult Post([FromUri]Boolean isGroup ,[FromBody] Message message)
         {
            string stringregIds;
             // on 
-            if (message.ReceiverNumber == null)
+            if (isGroup)
             {
-                Group group = new Group();
-
-              var regIds = group.GetTokensGroup(message.GroupId);
+              Group group = new Group();
+              var regIds = group.GetTokensGroup(Int32.Parse(message.ReceiverNumber));
               stringregIds = string.Join("\",\"", regIds);
 
             }
@@ -28,7 +28,7 @@ namespace ColonyServer.Controllers
                 stringregIds = message.FindToken();
             }
 
-            return Ok(message.sendMessage(stringregIds));
+            return Ok(message.sendMessage(stringregIds,isGroup));
 
 
         }

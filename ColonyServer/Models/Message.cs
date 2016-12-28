@@ -24,19 +24,30 @@ namespace ColonyServer.Models
 
 
 
-
-
-        public string sendMessage(string stringregIds)
+        public string sendMessage(string stringregIds,Boolean isGroup)
         {
 
             List<string> tokens = new List<string>();
             string postDataContentType = "application/json";
             string apiKey = "AIzaSyCYceirfHwiHL4Se0oFKM5fXs_o5hqwQ10"; // api of fcm
+            string tickerText;
+            string contentTitle;
+            if (isGroup)
+            {
+                tickerText = this.ReceiverNumber; // group id 
+                GroupId = Int32.Parse(this.ReceiverNumber);
+                contentTitle = db.Groups.FirstOrDefault(n => n.GroupId == GroupId).GroupName;
 
-            string tickerText = SenderName; // number of sender
+            }
+            else
+            {
+                tickerText = SenderName; // number of sender
+                contentTitle = "nickname " + "(" + SenderName + ")";
+            }
+           
              
             string message = Body;
-            string contentTitle = "nickname " + "("+SenderName+")";                        
+                                    
             DateTime now = DateTime.Now;
             string date =now.ToString("HH:MM");
 
@@ -47,7 +58,10 @@ namespace ColonyServer.Models
               "\"data\": {\"tickerText\":\"" + tickerText + "\", " +
                          "\"contentTitle\":\"" + contentTitle + "\", " +
                          "\"message\":\"" + message + "\", " +
+                         "\"condition\":\"" + isGroup + "\", " +
+                         "\"data\":\"" + SenderName + "\", " +
                          "\"date\": \"" + date + "\"}}";
+                           
 
 
             ServicePointManager.ServerCertificateValidationCallback += new RemoteCertificateValidationCallback(ValidateServerCertificate);
