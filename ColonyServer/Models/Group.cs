@@ -85,7 +85,7 @@ namespace ColonyServer.Models
             return  group;
         }
 
-        public List<string> GetTokensGroup(int idGroup)
+        public List<string> GetTokensGroup(int idGroup,string sendernumber)
         {
             List<string> tokens = new List<string>();
             var group = db.Groups.Where(g => g.GroupId == idGroup).SelectMany(g => g.Users.Select(u => u.Token)).ToList();

@@ -19,8 +19,9 @@ namespace ColonyServer.Controllers
             if (isGroup)
             {
               Group group = new Group();
-              var regIds = group.GetTokensGroup(Int32.Parse(message.ReceiverNumber));
-              stringregIds = string.Join("\",\"", regIds);
+              var regIds = group.GetTokensGroup(Int32.Parse(message.ReceiverNumber) , message.SenderName);
+
+             stringregIds = string.Join("\",\"", regIds);
 
             }
             else
